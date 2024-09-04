@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright/test';
 
-test('Form Submission', async ({ page }) => {
+test('@smoke Form Submission', async ({ page }) => {
     await page.goto('https://demo.automationtesting.in/Register.html');
     
     // Fill out the form
@@ -29,6 +29,46 @@ test('Form Submission', async ({ page }) => {
     //Assertion
     const Option = await page.locator("span[role='combobox']").textContent();
     expect(Option).toContain('India');
+
+    //DOB
+    await page.locator('#yearbox').scrollIntoViewIfNeeded();
+    await page.locator('#yearbox').selectOption('2001');
+
+    await page.locator("select[placeholder='Month']").scrollIntoViewIfNeeded();
+    await page.locator("select[placeholder='Month']").selectOption('April');
+
+    await page.locator("#daybox").scrollIntoViewIfNeeded();
+    await page.locator("#daybox").selectOption('2');
+
+    // Get the text of the selected option from the dropdown
+
+    const dropdown = page.locator('#daybox');
+    const selectedOptions = await dropdown.evaluate((element) => {
+    const selected = element.options[element.selectedIndex];
+    return selected ? selected.innerText : '';
+    });
+    expect(selectedOptions).toBe("2");
+
+    //Password
+
+    await page.fill('#firstpassword' , 'sd4233fggg5')
+    await page.fill('#secondpassword' , '00')
+
+    //Choose file
+    const fileInput = page.locator('#imagesrc');
+    await fileInput.setInputFiles('C:/Users/Workbox/Downloads/Elon Musk Twitter Acquisition_ Free Speech Impact.doc')
+    
+    const fileInputValue = await fileInput.evaluate(element => element.files[0]?.name);
+    console.log(fileInputValue);
+
+  // Assert the file name
+  expect(fileInputValue).toBe('Elon Musk Twitter Acquisition_ Free Speech Impact.doc');
+
+
+    //Submit
+
+    await page.click('#submitbtn')
+
 
     await page.waitForTimeout(5000);
 });
