@@ -1,73 +1,44 @@
 import { test, expect } from 'playwright/test';
+import RegistrationPage from '../Pages/RegistrationPage'
 
 test('@smoke Form Submission', async ({ page }) => {
-    await page.goto('https://demo.automationtesting.in/Register.html');
-    
+
     // Fill out the form
-    await page.fill("input[placeholder='First Name']", 'Muntazim');
-    await page.fill("input[placeholder='Last Name']", 'Khan');
-    await page.fill(".form-control.ng-pristine.ng-untouched.ng-valid[rows='3']", 'Board Bazar Peshawar');
-    await page.fill("input[type='email']", 'muntazim.khan@gmail.com');
-    await page.fill("input[type='tel']", '0147258963');
-    await page.locator("input[value='Male']").click();
-    await page.locator("#checkbox3").click();
+    const userRegistration = new RegistrationPage(page)
+    await userRegistration.visitURL()
+    await userRegistration.registerUser()
+
     
     // Skill dropdown
-    const skillsDropdown = page.locator('#Skills');
-    await skillsDropdown.selectOption('iOS');
     //Assertion
-    const selectedOption = await skillsDropdown.inputValue();
-    expect(selectedOption).toContain('iOS');
+    const value = await userRegistration.Skilldropdown()
+    expect(value).toContain('iOS');
     
-    //country dropdown
-    await page.click("span[role='combobox']");
-    await page.waitForSelector(".select2-results__option");
-    
-    // Click on "India" from the dropdown
-    const selectOption = page.locator(".select2-results__option:has-text('India')");
-    await selectOption.click();
+    //country dropdown  
     //Assertion
-    const Option = await page.locator("span[role='combobox']").textContent();
+    const Option = await userRegistration.SelectCountryFromList()
     expect(Option).toContain('India');
 
     //DOB
-    await page.locator('#yearbox').scrollIntoViewIfNeeded();
-    await page.locator('#yearbox').selectOption('2001');
+    const selectedDay = await userRegistration.DateOfBirth()
+    expect(selectedDay).toBe("2");
 
-    await page.locator("select[placeholder='Month']").scrollIntoViewIfNeeded();
-    await page.locator("select[placeholder='Month']").selectOption('April');
+   //Password
 
-    await page.locator("#daybox").scrollIntoViewIfNeeded();
-    await page.locator("#daybox").selectOption('2');
+   await userRegistration.EnterPassword() 
 
-    // Get the text of the selected option from the dropdown
 
-    const dropdown = page.locator('#daybox');
-    const selectedOptions = await dropdown.evaluate((element) => {
-    const selected = element.options[element.selectedIndex];
-    return selected ? selected.innerText : '';
-    });
-    expect(selectedOptions).toBe("2");
 
-    //Password
-
-    await page.fill('#firstpassword' , 'sd4233fggg5')
-    await page.fill('#secondpassword' , '00')
 
     //Choose file
-    const fileInput = page.locator('#imagesrc');
-    await fileInput.setInputFiles('C:/Users/Workbox/Downloads/Elon Musk Twitter Acquisition_ Free Speech Impact.doc')
-    
-    const fileInputValue = await fileInput.evaluate(element => element.files[0]?.name);
-    console.log(fileInputValue);
+  const fileInputValue = await userRegistration.uploadingfile()
 
   // Assert the file name
   expect(fileInputValue).toBe('Elon Musk Twitter Acquisition_ Free Speech Impact.doc');
 
 
     //Submit
-
-    await page.click('#submitbtn')
+  await userRegistration.SubmitForm()
 
 
     await page.waitForTimeout(5000);
