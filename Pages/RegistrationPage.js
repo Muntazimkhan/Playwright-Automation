@@ -10,7 +10,7 @@ import { firstName, lastName , enterAddress , enterEmail , enterPhonenumber, sel
 
     async visitURL(page){
         console.log('reached here.')
-        await this.page.goto('https://demo.automationtesting.in/Register.html',{ waitUntil: 'load' });
+        await this.page.goto(process.env.baseUrl,{ waitUntil: 'load' });
 
     }
 
