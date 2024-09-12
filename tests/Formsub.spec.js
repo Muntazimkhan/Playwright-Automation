@@ -1,13 +1,12 @@
 import { test, expect } from 'playwright/test';
 import RegistrationPage from '../Pages/RegistrationPage'
 
-test('@smoke Form Submission', async ({ page }) => {
+test('Form Submission', async ({ page }) => {
 
     // Fill out the form
     const userRegistration = new RegistrationPage(page)
     await userRegistration.visitURL()
     await userRegistration.registerUser()
-
     
     // Skill dropdown
     //Assertion
@@ -27,21 +26,17 @@ test('@smoke Form Submission', async ({ page }) => {
 
    await userRegistration.EnterPassword() 
 
-
-
-
     //Choose file
   const fileInputValue = await userRegistration.uploadingfile()
 
   // Assert the file name
   expect(fileInputValue).toBe('Elon Musk Twitter Acquisition_ Free Speech Impact.doc');
 
-
     //Submit
   await userRegistration.SubmitForm()
 
-
-    await page.waitForTimeout(5000);
+  await page.waitForTimeout(5000);
+  
 });
 
 

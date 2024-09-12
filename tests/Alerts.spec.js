@@ -10,7 +10,7 @@ test.beforeEach(async ({page}) =>{
 });
 
 //Alert with OK
-test('@smoke Interacting with alerts' , async ({page}) => {
+test('Interacting with alerts' , async ({page}) => {
     await myAlert.Alert_with_ok_button()
     
 })
@@ -26,7 +26,7 @@ test('Interacting with alerts with ok and cancel' , async ({page}) => {
 
 //Alert with Textbox
 
-test.only('Interacting with alerts with Textbox' , async ({page}) => {
+test('Interacting with alerts with Textbox' , async ({page}) => {
 
     const Textassertion = await myAlert.Alert_with_Textbox()   
     expect (await Textassertion).toHaveText('Hello Testing. . . . . . . . . . . . . . . . . . . . . . How are you today')
